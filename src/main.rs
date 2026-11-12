@@ -2,6 +2,7 @@
 
 mod adb;
 mod install;
+mod shortcut;
 
 use adb::{Adb, Device, Service, ServiceKind};
 use eframe::egui::{self, Color32, RichText};
@@ -217,6 +218,7 @@ struct App {
     show_pair: bool,
     auto_tried: Vec<String>,
     auto_opened: bool,
+    shortcut_needed: bool,
 }
 
 impl App {
@@ -236,6 +238,7 @@ impl App {
             show_pair: false,
             auto_tried: Vec::new(),
             auto_opened: false,
+            shortcut_needed: shortcut::needs_setup(),
         };
         app.start_backend();
         app
@@ -460,6 +463,24 @@ impl eframe::App for App {
                             self.shared.lock().unwrap().error = None;
                         }
                     });
+                }
+
+                if self.shortcut_needed {
+                    ui.add_space(8.0);
+                    let label = if shortcut::installed_exe().is_file() {
+                        "Обновить ярлык на эту версию"
+                    } else {
+                        "Добавить ярлык на рабочий стол и в «Пуск»"
+                    };
+                    if ui.button(label).clicked() {
+                        match shortcut::create() {
+                            Ok(msg) => {
+                                self.shortcut_needed = false;
+                                log(&self.shared, msg);
+                            }
+                            Err(e) => self.shared.lock().unwrap().error = Some(e),
+                        }
+                    }
                 }
 
                 if device.is_none() && snap.bin.is_some() && (snap.need_pair || self.show_pair) {

@@ -1,6 +1,6 @@
 [package]
 name = "scrcpy-wifi"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Android phone screen on Windows over Wi-Fi: a small GUI around scrcpy"
 

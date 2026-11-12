@@ -3,3 +3,4 @@ scripts/scrcpy/
 scrcpy/
 last-device.txt
 *.zip
+/scrcpy-wifi.exe

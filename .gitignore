@@ -1,3 +1,5 @@
+target/
+scripts/scrcpy/
 scrcpy/
 last-device.txt
 *.zip

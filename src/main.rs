@@ -695,10 +695,9 @@ fn status_line(ui: &mut egui::Ui, color: Color32, title: &str, spinner: bool) {
 }
 
 fn big_button(ui: &mut egui::Ui, text: &str, enabled: bool) -> bool {
-    let button = egui::Button::new(RichText::new(text).size(16.0).strong().color(Color32::WHITE))
-        .fill(ACCENT)
-        .min_size(egui::vec2(ui.available_width(), 40.0));
-    ui.add_enabled(enabled, button).clicked()
+    let button = egui::Button::new(RichText::new(text).size(16.0).strong().color(Color32::WHITE)).fill(ACCENT);
+    let size = egui::vec2(ui.available_width(), 40.0);
+    ui.add_enabled_ui(enabled, |ui| ui.add_sized(size, button)).inner.clicked()
 }
 
 fn setup_style(ctx: &egui::Context) {
